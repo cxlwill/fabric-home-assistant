@@ -15,18 +15,18 @@ while getopts ":n" opt; do
 
     sudo apt-get update
 
-    PKG_PYDEV=$(dpkg-query -W --showformat='${Status}\n' python-dev|grep "install ok installed")
-    echo Checking for python-dev: $PKG_PYDEV
+    PKG_PYDEV=$(dpkg-query -W --showformat='${Status}\n' python3-dev|grep "install ok installed")
+    echo Checking for python3-dev: $PKG_PYDEV
     if [ "" == "$PKG_PYDEV" ]; then
-      echo "缺少 python-dev。安装 python-dev。"
+      echo "缺少 python3-dev。安装 python3-dev。"
       sudo apt-get --force-yes --yes install python-dev
     fi
 
-    PKG_PYPIP=$(dpkg-query -W --showformat='${Status}\n' python-pip|grep "install ok installed")
-    echo Checking for python-pip: $PKG_PYPIP
+    PKG_PYPIP=$(dpkg-query -W --showformat='${Status}\n' python3-pip|grep "install ok installed")
+    echo Checking for python3-pip: $PKG_PYPIP
     if [ "" == "$PKG_PYPIP" ]; then
-      echo "缺少 python-pip。安装 python-pip。"
-      sudo apt-get --force-yes --yes install python-pip
+      echo "缺少 python3-pip。安装 python3-pip。"
+      sudo apt-get --force-yes --yes install python3-pip
     fi
 
     PKG_GIT=$(dpkg-query -W --showformat='${Status}\n' git|grep "install ok installed")
@@ -57,14 +57,14 @@ while getopts ":n" opt; do
       sudo apt-get --force-yes --yes remove apt-listchanges
     fi
 
-	sudo pip install --upgrade pip
-	sudo pip install --upgrade setuptools
-	sudo pip install pycrypto
-	sudo pip install cryptography
-	sudo pip install packaging
-	sudo pip install appdirs
-	sudo pip install six
-	sudo pip install fabric
+	sudo pip3 install --upgrade pip
+	sudo pip3 install --upgrade setuptools
+	sudo pip3 install pycrypto
+	sudo pip3 install cryptography
+	sudo pip3 install packaging
+	sudo pip3 install appdirs
+	sudo pip3 install six
+	sudo pip3 install fabric
 
     git clone https://git.coding.net/cxlwill/ha-aio.git
 
@@ -82,17 +82,17 @@ me=$(whoami)
 
 sudo apt-get update
 
-PKG_PYDEV=$(dpkg-query -W --showformat='${Status}\n' python-dev|grep "install ok installed")
+PKG_PYDEV=$(dpkg-query -W --showformat='${Status}\n' python3-dev|grep "install ok installed")
 echo Checking for python-dev: $PKG_PYDEV
 if [ "" == "$PKG_PYDEV" ]; then
-  echo "缺少 python-dev，即将安装 python-dev."
+  echo "缺少 python3-dev，即将安装 python3-dev."
   sudo apt-get --force-yes --yes install python-dev
 fi
 
-PKG_PYPIP=$(dpkg-query -W --showformat='${Status}\n' python-pip|grep "install ok installed")
+PKG_PYPIP=$(dpkg-query -W --showformat='${Status}\n' python3-pip|grep "install ok installed")
 echo Checking for python-pip: $PKG_PYPIP
 if [ "" == "$PKG_PYPIP" ]; then
-  echo "缺少 python3-pip，即将安装 python-pip."
+  echo "缺少 python3-pip，即将安装 python3-pip."
   sudo apt-get --force-yes --yes install python-pip
 fi
 
@@ -124,17 +124,17 @@ if [ "install ok installed" == "$PKG_APT_LISTCHANGES" ]; then
   sudo apt-get --force-yes --yes remove apt-listchanges
 fi
 
-sudo pip install --upgrade pip
-sudo pip install --upgrade setuptools
-sudo pip install pycrypto
-sudo pip install cryptography
-sudo pip install packaging
-sudo pip install appdirs
-sudo pip install six
-sudo pip install fabric
+sudo pip3 install --upgrade pip
+sudo pip3 install --upgrade setuptools
+sudo pip3 install pycrypto
+sudo pip3 install cryptography
+sudo pip3 install packaging
+sudo pip3 install appdirs
+sudo pip3 install six
+sudo pip3 install fabric
 
 git clone https://git.coding.net/cxlwill/ha-aio.git
 
 
-( cd /home/$me/fabric-home-assistant && fab deploy -H localhost 2>&1 | tee installation_report.txt )
+( cd /home/$me/ha-aio && fab deploy -H localhost 2>&1 | tee installation_report.txt )
 exit
