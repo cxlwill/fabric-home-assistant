@@ -19,42 +19,42 @@ while getopts ":n" opt; do
     echo Checking for python3-dev: $PKG_PYDEV
     if [ "" == "$PKG_PYDEV" ]; then
       echo "缺少 python3-dev。安装 python3-dev。"
-      sudo apt-get --force-yes --yes install python-dev
+      sudo apt-get --yes install python3-dev
     fi
 
     PKG_PYPIP=$(dpkg-query -W --showformat='${Status}\n' python3-pip|grep "install ok installed")
     echo Checking for python3-pip: $PKG_PYPIP
     if [ "" == "$PKG_PYPIP" ]; then
       echo "缺少 python3-pip。安装 python3-pip。"
-      sudo apt-get --force-yes --yes install python3-pip
+      sudo apt-get --yes install python3-pip
     fi
 
     PKG_GIT=$(dpkg-query -W --showformat='${Status}\n' git|grep "install ok installed")
     echo Checking for git: $PKG_GIT
     if [ "" == "$PKG_GIT" ]; then
       echo "缺少 git。安装 git。"
-      sudo apt-get --force-yes --yes install git
+      sudo apt-get --yes install git
     fi
 
     PKG_LIBSSL_DEV=$(dpkg-query -W --showformat='${Status}\n' libssl-dev|grep "install ok installed")
     echo Checking for libssl-dev: $PKG_LIBSSL_DEV
     if [ "" == "$PKG_LIBSSL_DEV" ]; then
       echo "缺少 libssl-dev。安装 libssl-dev。"
-      sudo apt-get --force-yes --yes install libssl-dev
+      sudo apt-get --yes install libssl-dev
     fi
 
     PKG_LIBFFI_DEV=$(dpkg-query -W --showformat='${Status}\n' libffi-dev|grep "install ok installed")
     echo Checking for libffi-dev: $PKG_LIBFFI_DEV
     if [ "" == "$PKG_LIBFFI_DEV" ]; then
       echo "缺少 libffi-dev。安装 libffi-dev。"
-      sudo apt-get --force-yes --yes install libffi-dev
+      sudo apt-get --yes install libffi-dev
     fi
 
     PKG_APT_LISTCHANGES=$(dpkg-query -W --showformat='${Status}\n' apt-listchanges|grep "install ok installed")
     echo Checking for apt-listchanges: $PKG_APT_LISTCHANGES
     if [ "install ok installed" == "$PKG_APT_LISTCHANGES" ]; then
       echo "apt-listchanges 已安装，准备移除。"
-      sudo apt-get --force-yes --yes remove apt-listchanges
+      sudo apt-get --yes remove apt-listchanges
     fi
 
 	sudo pip3 install --upgrade pip
@@ -86,42 +86,42 @@ PKG_PYDEV=$(dpkg-query -W --showformat='${Status}\n' python3-dev|grep "install o
 echo Checking for python-dev: $PKG_PYDEV
 if [ "" == "$PKG_PYDEV" ]; then
   echo "缺少 python3-dev，即将安装 python3-dev."
-  sudo apt-get --force-yes --yes install python-dev
+  sudo apt-get --yes install python3-dev
 fi
 
 PKG_PYPIP=$(dpkg-query -W --showformat='${Status}\n' python3-pip|grep "install ok installed")
 echo Checking for python-pip: $PKG_PYPIP
 if [ "" == "$PKG_PYPIP" ]; then
   echo "缺少 python3-pip，即将安装 python3-pip."
-  sudo apt-get --force-yes --yes install python-pip
+  sudo apt-get --yes install python3-pip
 fi
 
 PKG_GIT=$(dpkg-query -W --showformat='${Status}\n' git|grep "install ok installed")
 echo Checking for git: $PKG_GIT
 if [ "" == "$PKG_GIT" ]; then
   echo "缺少 git，即将安装 git。"
-  sudo apt-get --force-yes --yes install git
+  sudo apt-get --yes install git
 fi
 
 PKG_LIBSSL_DEV=$(dpkg-query -W --showformat='${Status}\n' libssl-dev|grep "install ok installed")
 echo Checking for libssl-dev: $PKG_LIBSSL_DEV
 if [ "" == "$PKG_LIBSSL_DEV" ]; then
   echo "缺少 libssl-dev，即将安装 libssl-dev。"
-  sudo apt-get --force-yes --yes install libssl-dev
+  sudo apt-get --yes install libssl-dev
 fi
 
 PKG_LIBFFI_DEV=$(dpkg-query -W --showformat='${Status}\n' libffi-dev|grep "install ok installed")
 echo Checking for libffi-dev: $PKG_LIBFFI_DEV
 if [ "" == "$PKG_LIBFFI_DEV" ]; then
   echo "缺少 libffi-dev，即将安装 libffi-dev。"
-  sudo apt-get --force-yes --yes install libffi-dev
+  sudo apt-get --yes install libffi-dev
 fi
 
 PKG_APT_LISTCHANGES=$(dpkg-query -W --showformat='${Status}\n' apt-listchanges|grep "install ok installed")
 echo Checking for apt-listchanges: $PKG_APT_LISTCHANGES
 if [ "install ok installed" == "$PKG_APT_LISTCHANGES" ]; then
   echo "apt-listchanges 已安装，准备移除。"
-  sudo apt-get --force-yes --yes remove apt-listchanges
+  sudo apt-get --yes remove apt-listchanges
 fi
 
 sudo pip3 install --upgrade pip
