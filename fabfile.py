@@ -65,12 +65,10 @@ def install_start():
     ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
     """)
     print("* Warning *")
-    print("""The primary use of this installer is for a new, unconfigured Home Assistant deployment.
-          Running the installer command straight from the Getting Started guide found on Github, will overwrite any existing configs.
-          Additional commands for upgrading should be run seperately. Please see the Github page for useage instructions""")
+    print("""此脚本仅限初次安装 Home Assistant 使用""")
     time.sleep(10)
-    print("Installer is starting...")
-    print("Your Raspberry Pi will reboot when the installer is complete.")
+    print("启动安装器...")
+    print("安装完成后，你的树莓派将重启。")
     time.sleep(5)
 
 
@@ -178,16 +176,6 @@ def setup_homeassistant_novenv():
     sudo("pip3 install --upgrade pip", user="homeassistant")
     sudo("pip3 install homeassistant", user="homeassistant")
 
-def setup_openzwave_novenv():
-    """ Install python-openzwave """
-    sudo("pip3 install --upgrade cython==0.24.1", user="homeassistant")
-    with cd("/srv/homeassistant/src"):
-        sudo("git clone https://github.com/OpenZWave/python-openzwave.git", user="homeassistant")
-        with cd("python-openzwave"):
-            sudo("git checkout python3", user="homeassistant")
-            sudo("make build", user="homeassistant")
-            sudo("make install", user="homeassistant")
-
 def setup_services_novenv():
     """ Enable applications to start at boot via systemd """
     hacfg="""
@@ -207,23 +195,6 @@ mqtt:
     sudo("systemctl enable home-assistant_novenv.service")
     sudo("systemctl daemon-reload")
 
-def setup_libcec_novenv():
-    """ Install libcec according to https://github.com/Pulse-Eight/libcec/blob/master/docs/README.raspberrypi.md """
-    with cd("/srv/homeassistant/src"):
-        sudo("git clone https://github.com/Pulse-Eight/platform.git", user="homeassistant")
-        sudo("mkdir platform/build", user="homeassistant")
-        with cd("platform/build"):
-            sudo("cmake ..", user="homeassistant")
-            sudo("make", user="homeassistant")
-            sudo("make install")
-        sudo("git clone https://github.com/Pulse-Eight/libcec.git", user="homeassistant")
-        sudo("mkdir libcec/build", user="homeassistant")
-        with cd("libcec/build"):
-            sudo("cmake -DRPI_INCLUDE_DIR=/opt/vc/include -DRPI_LIB_DIR=/opt/vc/lib ..", user="homeassistant")
-            sudo("make -j4", user="homeassistant")
-            sudo("make install")
-            sudo("ldconfig")
-
 ####################################
 ## Build and Install Applications ##
 ####################################
@@ -234,7 +205,7 @@ def setup_mosquitto():
         sudo("curl -O http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key")
         sudo("apt-key add mosquitto-repo.gpg.key")
         with cd("/etc/apt/sources.list.d/"):
-            sudo("curl -O http://repo.mosquitto.org/debian/mosquitto-jessie.list")
+            sudo("curl -O http://repo.mosquitto.org/debian/mosquitto-stretch.list")
             sudo("apt-get update")
             sudo("apt-cache search mosquitto")
             sudo("apt-get install -y mosquitto mosquitto-clients")
@@ -251,45 +222,6 @@ def setup_homeassistant():
     sudo("source /srv/homeassistant/homeassistant_venv/bin/activate && pip3 install homeassistant", user="homeassistant")
     with cd("/home/homeassistant/"):
         sudo("chown -R homeassistant:homeassistant /home/homeassistant/")
-
-def setup_openzwave():
-    """ Activate Virtualenv, Install python-openzwave"""
-    sudo("source /srv/homeassistant/homeassistant_venv/bin/activate && pip3 install --upgrade cython==0.24.1", user="homeassistant")
-    with cd("/srv/homeassistant/src"):
-        sudo("git clone --branch v0.3.3 https://github.com/OpenZWave/python-openzwave.git", user="homeassistant")
-        with cd("python-openzwave"):
-            sudo("git checkout python3", user="homeassistant")
-            sudo("source /srv/homeassistant/homeassistant_venv/bin/activate && make build", user="homeassistant")
-            sudo("source /srv/homeassistant/homeassistant_venv/bin/activate && make install", user="homeassistant")
-
-def setup_libcec():
-    setup_libcec_novenv()
-    sudo("ln -s /usr/local/lib/python3.4/dist-packages/cec /srv/homeassistant/homeassistant_venv/lib/python3.4/site-packages", user="homeassistant")
-
-def setup_libmicrohttpd():
-    """ Build and install libmicrohttpd """
-    with cd("/srv/homeassistant/src"):
-        sudo("mkdir libmicrohttpd")
-        sudo("chown homeassistant:homeassistant libmicrohttpd")
-        sudo("curl -O ftp://ftp.gnu.org/gnu/libmicrohttpd/libmicrohttpd-0.9.19.tar.gz", user="homeassistant")
-        sudo("tar zxvf libmicrohttpd-0.9.19.tar.gz")
-        with cd("libmicrohttpd-0.9.19"):
-            sudo("./configure")
-            sudo("make")
-            sudo("make install")
-
-def setup_openzwave_controlpanel():
-    """ Build and Install open-zwave-control-panel """
-    with cd("/srv/homeassistant/src"):
-        sudo("git clone https://github.com/OpenZWave/open-zwave-control-panel.git", user="homeassistant")
-        with cd("open-zwave-control-panel"):
-            put("Makefile", "Makefile", use_sudo=True)
-            sudo("make")
-            if pi_hardware == "armv7l":
-                sudo("ln -sd /srv/homeassistant/homeassistant_venv/lib/python3.4/site-packages/libopenzwave-0.3.3-py3.4-linux-armv7l.egg/config")
-            else:
-                sudo("ln -sd /srv/homeassistant/homeassistant_venv/lib/python3.4/site-packages/libopenzwave-0.3.3-py3.4-linux-armv**6**l.egg/config")
-        sudo("chown -R homeassistant:homeassistant /srv/homeassistant/src/open-zwave-control-panel")
 
 def setup_services():
     """ Enable applications to start at boot via systemd """
@@ -313,6 +245,7 @@ mqtt:
     sudo("systemctl enable home-assistant.service")
     sudo("systemctl daemon-reload")
     sudo("systemctl start home-assistant.service")
+    
 def upgrade_homeassistant():
     """ Activate Venv, and upgrade Home Assistant to latest version """
     sudo("source /srv/homeassistant/homeassistant_venv/bin/activate && pip3 install homeassistant --upgrade", user="homeassistant")
@@ -351,18 +284,6 @@ def deploy():
     ## Make apps start at boot ##
     setup_services()
 
-    ## Activate venv, build and install python-openzwave ##
-    setup_openzwave()
-
-    ## Build and install libmicrohttpd ##
-    setup_libmicrohttpd()
-
-    ## Build and install open-zwave-control-panel ##
-    setup_openzwave_controlpanel()
-
-    ## Build and install libcec ##
-    setup_libcec()
-
     ## Reboot the system ##
     reboot()
 
@@ -394,18 +315,6 @@ def deploy_novenv():
 
     ## Make apps start at boot ##
     setup_services_novenv()
-
-    ## Activate venv, build and install python-openzwave ##
-    setup_openzwave_novenv()
-
-    ## Build and install libmicrohttpd ##
-    setup_libmicrohttpd()
-
-    ## Build and install open-zwave-control-panel ##
-    setup_openzwave_controlpanel()
-
-    ## Build and install libcec ##
-    setup_libcec_novenv()
 
     ## Reboot the system ##
     reboot()

@@ -11,49 +11,49 @@ while getopts ":n" opt; do
     n)
 
     me=$(whoami)
-    
+
 
     sudo apt-get update
-    
+
     PKG_PYDEV=$(dpkg-query -W --showformat='${Status}\n' python-dev|grep "install ok installed")
     echo Checking for python-dev: $PKG_PYDEV
     if [ "" == "$PKG_PYDEV" ]; then
-      echo "No python-dev. Setting up python-dev."
+      echo "缺少 python-dev。安装 python-dev。"
       sudo apt-get --force-yes --yes install python-dev
     fi
 
     PKG_PYPIP=$(dpkg-query -W --showformat='${Status}\n' python-pip|grep "install ok installed")
     echo Checking for python-pip: $PKG_PYPIP
     if [ "" == "$PKG_PYPIP" ]; then
-      echo "No python-pip. Setting up python-pip."
+      echo "缺少 python-pip。安装 python-pip。"
       sudo apt-get --force-yes --yes install python-pip
     fi
 
     PKG_GIT=$(dpkg-query -W --showformat='${Status}\n' git|grep "install ok installed")
     echo Checking for git: $PKG_GIT
     if [ "" == "$PKG_GIT" ]; then
-      echo "No git. Setting up git."
+      echo "缺少 git。安装 git。"
       sudo apt-get --force-yes --yes install git
     fi
-    
+
     PKG_LIBSSL_DEV=$(dpkg-query -W --showformat='${Status}\n' libssl-dev|grep "install ok installed")
     echo Checking for libssl-dev: $PKG_LIBSSL_DEV
     if [ "" == "$PKG_LIBSSL_DEV" ]; then
-      echo "No libssl-dev. Setting up libssl-dev."
+      echo "缺少 libssl-dev。安装 libssl-dev。"
       sudo apt-get --force-yes --yes install libssl-dev
     fi
 
     PKG_LIBFFI_DEV=$(dpkg-query -W --showformat='${Status}\n' libffi-dev|grep "install ok installed")
     echo Checking for libffi-dev: $PKG_LIBFFI_DEV
     if [ "" == "$PKG_LIBFFI_DEV" ]; then
-      echo "No libffi-dev. Setting up libffi-dev."
+      echo "缺少 libffi-dev。安装 libffi-dev。"
       sudo apt-get --force-yes --yes install libffi-dev
     fi
 
     PKG_APT_LISTCHANGES=$(dpkg-query -W --showformat='${Status}\n' apt-listchanges|grep "install ok installed")
     echo Checking for apt-listchanges: $PKG_APT_LISTCHANGES
     if [ "install ok installed" == "$PKG_APT_LISTCHANGES" ]; then
-      echo "apt-listchanges installed. Removing."
+      echo "apt-listchanges 已安装，准备移除。"
       sudo apt-get --force-yes --yes remove apt-listchanges
     fi
 
@@ -65,10 +65,10 @@ while getopts ":n" opt; do
 	sudo pip install appdirs
 	sudo pip install six
 	sudo pip install fabric
-    
-    git clone https://github.com/home-assistant/fabric-home-assistant.git
 
-    ( cd /home/$me/fabric-home-assistant && fab deploy_novenv -H localhost 2>&1 | tee installation_report.txt )
+    git clone https://git.coding.net/cxlwill/ha-aio.git
+
+    ( cd /home/$me/ha-aio && fab deploy_novenv -H localhost 2>&1 | tee installation_report.txt )
     exit
       ;;
     \?)
@@ -85,42 +85,42 @@ sudo apt-get update
 PKG_PYDEV=$(dpkg-query -W --showformat='${Status}\n' python-dev|grep "install ok installed")
 echo Checking for python-dev: $PKG_PYDEV
 if [ "" == "$PKG_PYDEV" ]; then
-  echo "No python-dev. Setting up python-dev."
+  echo "缺少 python-dev，即将安装 python-dev."
   sudo apt-get --force-yes --yes install python-dev
 fi
 
 PKG_PYPIP=$(dpkg-query -W --showformat='${Status}\n' python-pip|grep "install ok installed")
 echo Checking for python-pip: $PKG_PYPIP
 if [ "" == "$PKG_PYPIP" ]; then
-  echo "No python3-pip. Setting up python-pip."
+  echo "缺少 python3-pip，即将安装 python-pip."
   sudo apt-get --force-yes --yes install python-pip
 fi
 
 PKG_GIT=$(dpkg-query -W --showformat='${Status}\n' git|grep "install ok installed")
 echo Checking for git: $PKG_GIT
 if [ "" == "$PKG_GIT" ]; then
-  echo "No git. Setting up git."
+  echo "缺少 git，即将安装 git。"
   sudo apt-get --force-yes --yes install git
 fi
 
 PKG_LIBSSL_DEV=$(dpkg-query -W --showformat='${Status}\n' libssl-dev|grep "install ok installed")
 echo Checking for libssl-dev: $PKG_LIBSSL_DEV
 if [ "" == "$PKG_LIBSSL_DEV" ]; then
-  echo "No libssl-dev. Setting up libssl-dev."
+  echo "缺少 libssl-dev，即将安装 libssl-dev。"
   sudo apt-get --force-yes --yes install libssl-dev
 fi
 
 PKG_LIBFFI_DEV=$(dpkg-query -W --showformat='${Status}\n' libffi-dev|grep "install ok installed")
 echo Checking for libffi-dev: $PKG_LIBFFI_DEV
 if [ "" == "$PKG_LIBFFI_DEV" ]; then
-  echo "No libffi-dev. Setting up libffi-dev."
+  echo "缺少 libffi-dev，即将安装 libffi-dev。"
   sudo apt-get --force-yes --yes install libffi-dev
 fi
 
 PKG_APT_LISTCHANGES=$(dpkg-query -W --showformat='${Status}\n' apt-listchanges|grep "install ok installed")
 echo Checking for apt-listchanges: $PKG_APT_LISTCHANGES
 if [ "install ok installed" == "$PKG_APT_LISTCHANGES" ]; then
-  echo "apt-listchanges installed. Removing."
+  echo "apt-listchanges 已安装，准备移除。"
   sudo apt-get --force-yes --yes remove apt-listchanges
 fi
 
@@ -133,7 +133,7 @@ sudo pip install appdirs
 sudo pip install six
 sudo pip install fabric
 
-git clone https://github.com/home-assistant/fabric-home-assistant.git
+git clone https://git.coding.net/cxlwill/ha-aio.git
 
 
 ( cd /home/$me/fabric-home-assistant && fab deploy -H localhost 2>&1 | tee installation_report.txt )
